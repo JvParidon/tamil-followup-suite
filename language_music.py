@@ -220,4 +220,4 @@ class Experiment(object):
 
 if __name__ == '__main__':
     pp_info = get_pp_info()
-    Experiment('language', pp_info).run()
+    Experiment('music', pp_info).run()
