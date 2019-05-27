@@ -55,6 +55,15 @@ class Experiment(object):
             log = csv.DictWriter(log_file, fieldnames=log_fields, delimiter='\t')
             log.writeheader()
 
+            # counterbalance order of addition and deletion blocks across participants
+            trials = list(trials)
+            if (int(pp_info['number']) % 4) > 2:
+                for i in range(len(trials)):
+                    if trials[i]['condition'] == 'addition':
+                        trials[i]['block'] = str(int(trials[i]['block']) - 2)
+                    elif trials[i]['condition'] == 'deletion':
+                        trials[i]['block'] = str(int(trials[i]['block']) + 2)
+
             # preload block and instructions
             blocks = {}
             self.instructions = {}
@@ -152,6 +161,7 @@ class Experiment(object):
     def practice_trial(self, trial):
         # present practice trial
         self.text.text = '+'
+        #self.text.text = trial['Question']
         self.text.draw()
         self.win.callOnFlip(self.clock.reset)
         self.isi.complete()
@@ -160,6 +170,7 @@ class Experiment(object):
             self.text.text = '-'
             self.text.draw()
             self.win.callOnFlip(self.clock.reset)
+            audio.play(self.questions[trial['Question']], wait=True)
             audio.play(self.questions[trial['Question']], wait=True)
             self.win.flip()
         keys = event.waitKeys(keyList=['escape'] + trial['keyboard'].split(' '), timeStamped=self.clock)
@@ -190,6 +201,7 @@ class Experiment(object):
             self.text.text = '-'
             self.text.draw()
             self.win.callOnFlip(self.clock.reset)
+            audio.play(self.questions[trial['Question']], wait=True)
             audio.play(self.questions[trial['Question']], wait=True)
             self.win.flip()
         keys = event.waitKeys(keyList=['escape'] + trial['keyboard'].split(' '), timeStamped=self.clock)

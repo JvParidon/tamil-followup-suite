@@ -1,0 +1,4 @@
+# ignore the data directory (because it includes data that is pseudonymized, instead of anonymized)
+data/
+# ignore python cache
+__pycache__/
