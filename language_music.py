@@ -57,7 +57,7 @@ class Experiment(object):
 
             # counterbalance order of addition and deletion blocks across participants
             trials = list(trials)
-            if (int(pp_info['number']) % 4) > 2:
+            if (int(self.pp_info['number']) % 4) > 2:
                 for i in range(len(trials)):
                     if trials[i]['condition'] == 'addition':
                         trials[i]['block'] = str(int(trials[i]['block']) - 2)
@@ -121,17 +121,13 @@ class Experiment(object):
 
     def instruction_trial(self, trial):
         # present instruction trial
-        self.text.text = '+'
+        self.text.text = '||'
         self.text.draw()
         self.win.callOnFlip(self.clock.reset)
         self.isi.complete()
         self.win.flip()
         if trial['Instruction'] != '':
-            self.text.text = '||'
-            self.text.draw()
-            self.win.callOnFlip(self.clock.reset)
             audio.play(self.instructions[trial['Instruction']], wait=True)
-            self.win.flip()
         keys = event.waitKeys(keyList=['escape'] + trial['keyboard'].split(' '), timeStamped=self.clock)
         trial['keypress'], trial['RT'] = keys[0]
         if trial['keypress'] == 'escape':
